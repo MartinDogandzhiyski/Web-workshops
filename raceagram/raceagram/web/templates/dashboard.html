@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block page_content %}
+
+    {% if car_photos %}
+    <!-- If there are pet photos -->
+        <h1 class='text-center'>All Car Photos</h1>
+        <div class="container mb-5">
+            <div class="row mb-5">
+                {% for car_photo in car_photos%}
+            <!-- First Card with Info for the Pet -->
+                    <div class="card ml-3 mb-3" style="width: 18rem;">
+                <!-- Image -->
+                        <img src="{{ car_photo.photo }}"
+                            class="card-img-top" alt="Photo description">
+                        <div class="card-body">
+                            {% for car in car_photo.tagged_cars.all %}
+                    <!-- Info for each pet on the photo -->
+                                <h5 class="card-title">{{ car.name }}{% if car.date_of_birth %}
+                                    {{ car.age }}
+                                {% endif %}</h5>
+                            {% endfor %}
+                    <!-- First 30 chars from the description -->
+                            <p class="card-text">{{ car_photo.description|truncatechars:30 }}</p>
+                    <!-- Button to the Photo Details Page -->
+                            <a href="{% url 'car photo details' car_photo.id %}" class="btn btn-primary">See details</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+
+        </div>
+    {% else %}
+
+        <h1 class='text-center'>No car photos yet</h1>
+        <div class=" row d-flex justify-content-center align-content-center">
+        <!-- Button to Add a new Photo -->
+            <a href="#" class="btn btn-lg btn-secondary row align-self-baseline">Add Photo</a>
+        </div>
+    {% endif %}
+
+{% endblock %}
