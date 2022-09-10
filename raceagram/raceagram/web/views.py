@@ -1,5 +1,4 @@
 
-
 from django.shortcuts import render, redirect
 
 from raceagram.web.models import Profile, CarPhoto
@@ -31,8 +30,9 @@ def show_dashboard(request):
 
 
 def show_profile(request):
-    total_likes = 0
-    total_images = 0
+    profile = get_profile()
+    total_likes = sum(cp.likes for cp in CarPhoto.objects.filter(tagged_cars__user_profile=profile).distinct())
+    total_images = len(CarPhoto.objects.filter(tagged_cars__user_profile=profile).distinct())
     context = {
         'profile': get_profile(),
         'total_likes': total_likes,
@@ -64,3 +64,4 @@ def show_best_cars(request):
         'bestt_cars': bestt_cars
     }
     return render(request, 'best_cars.html', context)
+
