@@ -34,10 +34,10 @@
                 <li/>
                 {% if not hide_additional_nav_items %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Add Car</a>
+                        <a class="nav-link" href="{% url 'create car' %}">Add Car</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Add Photo</a>
+                        <a class="nav-link" href="{% url 'create car photo' %}">Add Photo</a>
                     </li>
                 {% endif %}
                 <li class="nav-item">
@@ -57,6 +57,9 @@
     {% block page_content %}
     {% endblock %}
 </div>
+
+{% block bottom_page_content %}
+{% endblock %}
 
 <!-- Page Footer -->
 <footer class="fixed-bottom card-footer ">
