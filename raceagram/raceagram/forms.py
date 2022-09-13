@@ -1,6 +1,6 @@
 from django import forms
 
-from raceagram.helpers import BootstrapFormMixin
+from raceagram.helpers import BootstrapFormMixin, DisabledFieldsFormMixin
 from raceagram.web.models import Profile, CarPhoto, Car
 
 
@@ -84,7 +84,6 @@ class DeleteProfileForm(forms.ModelForm):
         self.instance.delete()
         return self.instance
 
-
     class Meta:
         model = Profile
         fields = ()
@@ -106,3 +105,27 @@ class CreateCarForm(BootstrapFormMixin, forms.ModelForm):
                 }
             )
         }
+
+
+class EditCarForm(BootstrapFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+    class Meta:
+        model = Car
+        exclude = ('user_profile',)
+
+
+class DeleteCarForm(BootstrapFormMixin, DisabledFieldsFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+        self._init_disabled_fields()
+
+    def save(self, commit=True):
+        self.instance.delete()
+        return self.instance
+
+    class Meta:
+        model = Car
+        exclude = ('user_profile',)
