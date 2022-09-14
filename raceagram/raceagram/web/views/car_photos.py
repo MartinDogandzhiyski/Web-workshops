@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 
+from raceagram.forms import CreateCarPhotoForm, EditCarPhotoForm
+from raceagram.web.helpers import get_profile
 from raceagram.web.models import CarPhoto
 
 
@@ -29,8 +31,33 @@ def show_best_cars(request):
 
 
 def create_car_photo(request):
-    return render(request, 'photo_create.html')
+    instance = CarPhoto()
+    if request.method == 'POST':
+        form = CreateCarPhotoForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = CreateCarPhotoForm(instance=instance)
+
+    context = {
+        'form': form
+    }
+    return render(request, 'photo_create.html', context)
 
 
-def edit_car_photo(request):
-    return render(request, 'photo_edit.html')
+def edit_car_photo(request, pk):
+    instance = CarPhoto.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = EditCarPhotoForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = EditCarPhotoForm(instance=instance)
+
+    context = {
+        'form': form,
+        'car_photo': instance
+    }
+    return render(request, 'photo_edit.html', context)
