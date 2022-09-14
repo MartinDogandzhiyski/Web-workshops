@@ -111,6 +111,7 @@ class EditCarForm(BootstrapFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._init_bootstrap_form_controls()
+
     class Meta:
         model = Car
         exclude = ('user_profile',)
@@ -129,3 +130,42 @@ class DeleteCarForm(BootstrapFormMixin, DisabledFieldsFormMixin, forms.ModelForm
     class Meta:
         model = Car
         exclude = ('user_profile',)
+
+
+class CreateCarPhotoForm(BootstrapFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+
+    photo = forms.FileField(required=False)
+
+    class Meta:
+        model = CarPhoto
+        fields = ('photo', 'description', 'tagged_cars')
+        widgets = {
+            'photo': forms.FileInput(
+                attrs={
+                    'class': 'form-control-file',
+
+                }
+            ),
+
+            'description': forms.TextInput(
+                attrs={
+                    'placeholder': 'Enter description',
+
+                }
+            ),
+
+        }
+
+
+class EditCarPhotoForm(BootstrapFormMixin, DisabledFieldsFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+        self._init_disabled_fields()
+
+    class Meta:
+        model = CarPhoto
+        fields = ('photo', 'description', 'tagged_cars')
